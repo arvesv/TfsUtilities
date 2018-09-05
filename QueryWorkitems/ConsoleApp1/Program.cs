@@ -10,8 +10,7 @@ namespace QueryWorkitemsUsingTFSApi
 {
     public static class MyExtensions
     {
-        public static IEnumerable<IEnumerable<T>> Batch<T>(this IEnumerable<T> items,
-            int maxItems)
+        public static IEnumerable<IEnumerable<T>> Batch<T>(this IEnumerable<T> items, int maxItems)
         {
             return items.Select((item, inx) => new { item, inx })
                 .GroupBy(x => x.inx / maxItems)
@@ -29,7 +28,6 @@ namespace QueryWorkitemsUsingTFSApi
             var connection = new VssConnection(new Uri(VstsCollectionUrl), new VssClientCredentials());
             var witClient = connection.GetClient<WorkItemTrackingHttpClient>();
 
-            // Find all workitems in U4SM
             var queryResults = witClient.QueryByWiqlAsync(new Wiql
             {
                 Query = "SELECT [Id] FROM workitems WHERE [Team Project] = '<theproject>' "
@@ -46,7 +44,6 @@ namespace QueryWorkitemsUsingTFSApi
 
             foreach (var batch in batches)
             {
-
                 var workItems = witClient
                     .GetWorkItemsAsync(
                         batch,
